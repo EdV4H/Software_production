@@ -11,6 +11,7 @@ public class SceneManager extends Application {
         Title, Login, Game, GameOver;
     }
     public static sceneType currentScene;
+    private static boolean isServerConnected;
 
     public static Stage stage;
 
@@ -27,6 +28,12 @@ public class SceneManager extends Application {
             stage.setTitle("SceneManager");
             stage.setScene(loginScene.getScene());
             stage.setResizable(false);
+
+            stage.showingProperty().addListener((observable, oldValue, newValue) -> {
+                if (oldValue == true && newValue == false) {
+                    if (isServerConnected) GameClient.Sendmessage("DISCONNECT");
+                }
+            });
 
             AnimationTimer timer = new AnimationTimer(){
             
@@ -73,7 +80,8 @@ public class SceneManager extends Application {
 		}
 
 		GameClient mrt = new GameClient(socket, name);
-		mrt.start();
+        mrt.start();
+        isServerConnected = true;
     }
 
     public static void main (String args[]) {

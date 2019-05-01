@@ -51,6 +51,9 @@ public class GameController implements Initializable {
     private Button button_dr;
 
     @FXML
+    private Button button_disconnect;
+
+    @FXML
     void cmdDLeft(MouseEvent event) {
         textfield_cmd.setText(textfield_cmd.getText()+" DL");
     }
@@ -100,6 +103,11 @@ public class GameController implements Initializable {
         String msg = "CMD" + textfield_cmd.getText();
         GameClient.Sendmessage(msg);
         System.out.println("cmd sent successfully.");
+    }
+
+    @FXML
+    private void disconnect (MouseEvent event) {
+        GameClient.Sendmessage("DISCONNECT");
     }
 
     @Override

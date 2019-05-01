@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
    <children>
       <Pane fx:id="pane_screen" layoutX="14.0" layoutY="14.0" prefHeight="450.0" prefWidth="450.0" style="-fx-background-color: gray;" />
@@ -60,5 +59,6 @@
             <Font size="22.0" />
          </font>
       </Button>
+      <Button fx:id="button_disconnect" layoutX="475.0" layoutY="438.0" mnemonicParsing="false" onMouseClicked="#disconnect" text="切断" />
    </children>
 </Pane>

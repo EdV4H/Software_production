@@ -29,7 +29,7 @@ public class GameClient extends Thread {
                 String inputLine = in.readLine();
                 System.out.println(inputLine);
                 if (inputLine != null) {
-                    if (inputLine.equals("EXIT")) break;
+                    if (inputLine.equals("DISCONNECT")) break;
                     Game.receiveCmd(inputLine);
                 }
                 //try { Thread.sleep(1000); } catch (Exception e) { e.printStackTrace();}

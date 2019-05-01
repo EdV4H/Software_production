@@ -50,6 +50,12 @@ class ClientProcThread extends Thread {
                 String inputLine = myIn.readLine();
                 System.out.println("Received from client No."+number+"("+myName+"), Messages: "+ inputLine);
                 if (inputLine != null) {
+                    if (inputLine.equals("DISCONNECT")) {
+                        isAlive = false;
+                        GameServer.disconnect(number);
+                        myOut.println("DISCONNECT");
+                        break;
+                    }
                     if (inputLine.startsWith("CMD")) isAction = true;
                     GameServer.SendAll(inputLine + " " + number, myName, false);
                 }
@@ -95,6 +101,16 @@ class GameServer {
         }
         SendAll(buf.toString(), "Server", false);
         isGameStarted = true;
+    }
+
+    public static void disconnect (int n) {
+        member--;
+        incoming[n] = null;
+        flag[n] = false;
+        isr[n] = null;
+        in[n] = null;
+        out[n] = null;
+        myClientProcThread[n] = null;
     }
 
     public static void SetFlag (int n, boolean value) {
@@ -145,6 +161,5 @@ class GameServer {
 		} catch (Exception e) {
 			System.err.println("ソケット作成時にエラーが発生しました: " + e);
         }
-        System.out.println("The game is started.");
 	}
 }

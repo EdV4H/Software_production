@@ -138,6 +138,7 @@ public class Game extends Task {
             this.hp = hp;
             this.x = x; this.y = y;
             this.setX(x); this.setY(y);
+            this.setRotate(0);
             this.speed = speed;
             this.cmdNum = 0;
 
@@ -212,21 +213,11 @@ public class Game extends Task {
             for (int i = 1; i < inputTokens.length-1; i++) cmd[i-1] = inputTokens[i];
         }
 
-        void moveX (double range) {
-            x += range;
-            if (x < 0) x = 0;
-            else if (x > screenWidth-20) x = 430;
-        }
-        void moveY (double range) {
-            y += range;
-            if (y < 0) y = 0;
-            else if (y > screenHeight-20) y = 430;
-        }
-
         void move (double range, double digree) {
-            double vertical = range * Math.sin((digree)*Math.PI/180d);
-            double horizontal = range + Math.cos((digree)*Math.PI/180d);
-            x += vertical; y += horizontal;
+            System.out.println("move " + range + " " + digree);
+            double vertical = -range * Math.cos((digree)*Math.PI/180d);
+            double horizontal = range * Math.sin((digree)*Math.PI/180d);
+            x += horizontal; y += vertical;
             if (x < 0) x = 0; else if (x > screenWidth-20) x = 430;
             if (y < 0) y = 0; else if (y > screenHeight-20) y = 430;
         }
