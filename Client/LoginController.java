@@ -23,6 +23,9 @@ public class LoginController {
     private Button button_selectserver;
 
     @FXML
+    private Button button_launchserver;
+
+    @FXML
     private TextField textfield_ip;
 
     @FXML
@@ -47,7 +50,7 @@ public class LoginController {
     }
 
     @FXML
-    private void ConnetcServer () {
+    private void ConnectServer () {
         isNextScene = true;
         textfield_ip.setDisable(true);
         textfield_name.setDisable(true);
@@ -66,6 +69,12 @@ public class LoginController {
                 break;
         }
         SceneManager.changeScene(SceneManager.sceneType.Game);
+    }
+
+    @FXML
+    private void launchServer () {
+        GameServer server = new GameServer();
+        server.start();
     }
 
     public boolean getIsNextScene () {return isNextScene;}

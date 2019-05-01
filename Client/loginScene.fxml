@@ -11,7 +11,7 @@
    <children>
       <Button fx:id="button_selectserver" layoutX="224.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#SetServerIp" text="サーバー選択" />
       <TextField fx:id="textfield_ip" layoutX="15.0" layoutY="14.0" prefHeight="26.0" prefWidth="190.0" promptText="サーバーのIPアドレスを入力" />
-      <Button fx:id="button_connectserver" layoutX="468.0" layoutY="409.0" mnemonicParsing="false" onMouseClicked="#ConnetcServer" text="サーバー接続">
+      <Button fx:id="button_connectserver" layoutX="468.0" layoutY="409.0" mnemonicParsing="false" onMouseClicked="#ConnectServer" text="サーバー接続">
          <font>
             <Font size="19.0" />
          </font>
@@ -23,6 +23,11 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="choicebox_gamemode" layoutX="326.0" layoutY="409.0" prefHeight="38.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="choicebox_gamemode" layoutX="14.0" layoutY="134.0" prefHeight="38.0" prefWidth="132.0" />
+      <Button fx:id="button_launchserver" layoutX="468.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#launchServer" text="サーバー開始">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Button>
    </children>
 </Pane>

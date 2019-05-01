@@ -1,5 +1,7 @@
 import javafx.scene.layout.Pane;
 
+import org.omg.PortableInterceptor.HOLDING;
+
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -78,6 +80,7 @@ public class Game extends Task {
         for (int i = 0; i < playerNum; i++) {
             System.out.println("adding player...");
             screen.getChildren().add(player[i]);
+            for (int j = 0; j < Character.getBulletNum(); j++) screen.getChildren().add(player[i].bullets[j]);
         }
         currentPhase = Phase.Custom;
     }
@@ -125,13 +128,18 @@ public class Game extends Task {
         private final int id, max_hp;
         private int hp;
         private double x, y, speed;
+        private final String name;
 
         private String cmd[];
         private int cmdNum;
 
-        Character (String img, int id, double x, double y, int hp, double speed) {
+        public Bullet bullets[];
+        private static int bulletNum;
+
+        Character (String name, int id, double x, double y, int hp, double speed) {
             super();
-            Image image = new Image("src/"+img+".png", 20, 0, true, false);
+            this.name = name;
+            Image image = new Image("src/"+name+".png", 20, 0, true, false);
             this.setImage(image);
             this.id = id;
             max_hp = hp;
@@ -141,6 +149,7 @@ public class Game extends Task {
             this.setRotate(0);
             this.speed = speed;
             this.cmdNum = 0;
+            this.bulletNum = 10;
 
             cmdTimer = new Timeline(new KeyFrame(Duration.millis(100000/speed), new EventHandler<ActionEvent>() {
                 @Override
@@ -157,7 +166,12 @@ public class Game extends Task {
                 }
             };
             System.out.println("character created.");
+
+            bullets = new Bullet[bulletNum];
+            for (int i = 0; i < bulletNum; i++) bullets[i] = new Bullet("enemy", name);
         }
+
+        public static int getBulletNum () {return bulletNum;}
 
         void update () {
             //System.out.println("update() is called.");
@@ -200,6 +214,9 @@ public class Game extends Task {
                 case "SEARCH":
                     search(100);
                     break;
+                case "FIRE":
+                    fire(this.getRotate());
+                    break;
                 default:
                     cmdNum = 0;
                     break;
@@ -230,6 +247,14 @@ public class Game extends Task {
             }
         }
 
+        void fire (double rot) {
+            for (int i = 0; i < bulletNum; i++) {
+                if (bullets[i].isActive) continue;
+                bullets[i].firing(this.getX(),this.getY(),rot,1,100);
+                break;
+            }
+        }
+
         void stop () {
             cmdTimer.stop();
             animationTimer.stop();
@@ -246,4 +271,55 @@ public class Game extends Task {
             return digree;
         }
     }    
+
+    private static class Bullet extends ImageView{
+        private AnimationTimer timer;
+
+        private final String who;
+        private double spd;
+        private int dmg;
+        private boolean isActive;
+
+        public Bullet (String img, String who) {
+            super();
+            Image image = new Image("src/"+img+".png", 5, 0, true, false);
+            this.setImage(image);
+            this.who = who;
+            isActive = false;
+            this.setVisible(false);
+            this.setX(0); this.setY(0); this.setRotate(0); 
+
+            timer = new AnimationTimer(){
+            
+                @Override
+                public void handle(long now) {
+                    update();
+                }
+            };
+            System.out.println("Bullet is created.");
+        }
+
+        public void firing (double x, double y, double rot, double spd, int dmg) {
+            this.setX(x); this.setY(y); this.setRotate(rot); 
+            this.spd = spd;
+            this.dmg = dmg;
+            this.isActive = true;
+            this.setVisible(true);
+            timer.start();
+            System.out.println("Firing at " + x + " " + y + " " + rot + ".");
+        }
+
+        public void update () {
+            if (!isActive) return;
+            double vertical = -spd * Math.cos(this.getRotate() * Math.PI / 180d);
+            double horizontal = spd * Math.sin(this.getRotate() * Math.PI / 180d);
+            this.setX(this.getX()+horizontal);
+            this.setY(this.getY()+vertical);
+            if (this.getX() < 0 || this.getX() > screenWidth-20 || this.getY() < 0 || this.getY() > screenHeight-20) {
+                this.isActive = false;
+                this.setVisible(false);
+                timer.stop();
+            }      
+        }
+    }
 }
