@@ -62,9 +62,8 @@ public class Game extends Task {
                     try { Thread.sleep(1000);} catch (Exception e) { e.printStackTrace();}
                     break;
                 case Action:
-                    for (int i=0; i<playerNum; i++) {player[i].action();}
-                    try { Thread.sleep(100000);} catch (Exception e) { e.printStackTrace();}
-                    for (int i=0; i<playerNum; i++) {player[i].stop();}
+                    //for (int i=0; i<playerNum; i++) {player[i].action();}
+                    collision();
                     break;
                 default:
                     isGameOver = true;
@@ -75,10 +74,16 @@ public class Game extends Task {
     }
 
     void collision () {
-        for (int i = 0; i < playerNum; i++) {
-            for (int j = 0; j < Character.bulletNum; j++) {
+        for (Character e : player) {
+            for (Bullet b : e.bullets) {
+                if (!(b.getIsActive())) continue;
                 for (Character p : player) {
-                    if ()
+                    if (e.getMyId() == p.getMyId()) continue;
+                    double distance = getDistance(b.getPositionX(), b.getPositionY(), p.getPositionX(), p.getPositionY());
+                    if (distance < (b.getRadius() + p.getRadius())) {
+                        p.damage(b.hit());
+                        if (p.getName().equals("player")) hpBar.setProgress((double)p.getHp() / (double)p.getMaxHp());
+                    }
                 }
             }
         }
@@ -123,6 +128,7 @@ public class Game extends Task {
                     player[n].inputCmd(inputLine);
                     break;
                 case "ACTION":
+                    for (int i=0; i<playerNum; i++) {player[i].action();}
                     currentPhase = Phase.Action;
                     break;
             }
@@ -196,8 +202,18 @@ public class Game extends Task {
 
         public static int getBulletNum () {return bulletNum;}
 
+        public String getName () {return name;}
+        public int getMyId () {return id;}
+        public int getMaxHp () {return max_hp;}
+        public int getHp () {return hp;}
         public double getPositionX () {return x;}
         public double getPositionY () {return y;}
+        public double getRadius () {return r;}
+
+        public void damage (int dmg) {
+            hp -= dmg;
+            System.out.println("player" + id);
+        }
 
         void update () {
             //System.out.println("update() is called.");
@@ -240,7 +256,7 @@ public class Game extends Task {
                     move(30, this.getRotate()+135d);
                     break;
                 case "SEARCH":
-                    search(100);
+                    search(1000);
                     break;
                 case "FIRE":
                     fire(this.getRotate());
@@ -273,7 +289,7 @@ public class Game extends Task {
             for (int i = 0; i < playerNum; i++) {
                 if (id == i) continue;
                 double d = getDistance(x, y, player[i].getPositionX(), player[i].getPositionY());
-                if (d < range || dis < d) continue;
+                if (range < d || dis < d) continue;
                 dis = d;
                 this.setRotate(getDigree(x, y, player[i].getPositionX(), player[i].getPositionY()));
                 System.out.println("getRatate() = " + this.getRotate());
@@ -283,7 +299,7 @@ public class Game extends Task {
         void fire (double rot) {
             for (int i = 0; i < bulletNum; i++) {
                 if (bullets[i].isActive) continue;
-                bullets[i].firing(x, y, rot, 1, 100);
+                bullets[i].firing(x, y, rot, 1, 10);
                 break;
             }
         }
@@ -351,5 +367,18 @@ public class Game extends Task {
         }
 
         void draw () { this.setX(x-r); this.setY(y-r); }
+
+        public int hit () {
+            this.isActive = false;
+            this.setVisible(false);
+            timer.stop();
+            System.out.println("Hit at " + x + " " + y);
+            return dmg;
+        }
+
+        public double getPositionX () {return x;}
+        public double getPositionY () {return y;}
+        public double getRadius () {return r;}
+        public boolean getIsActive () {return isActive;}
     }
 }
