@@ -51,6 +51,9 @@ public class GameController implements Initializable {
     private Button button_dr;
 
     @FXML
+    private Button button_fire;
+
+    @FXML
     private Button button_disconnect;
 
     @FXML
@@ -96,6 +99,11 @@ public class GameController implements Initializable {
     @FXML
     void cmdUp(MouseEvent event) {
         textfield_cmd.setText(textfield_cmd.getText()+" UP");
+    }
+
+    @FXML
+    void cmdFire(MouseEvent event) {
+        textfield_cmd.setText(textfield_cmd.getText()+" FIRE");
     }
 
     @FXML

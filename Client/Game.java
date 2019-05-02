@@ -1,7 +1,5 @@
 import javafx.scene.layout.Pane;
 
-import org.omg.PortableInterceptor.HOLDING;
-
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
