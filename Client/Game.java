@@ -74,6 +74,16 @@ public class Game extends Task {
         return null;
     }
 
+    void collision () {
+        for (int i = 0; i < playerNum; i++) {
+            for (int j = 0; j < Character.bulletNum; j++) {
+                for (Character p : player) {
+                    if ()
+                }
+            }
+        }
+    }
+
     public static void addPlayer () {
         for (int i = 0; i < playerNum; i++) {
             System.out.println("adding player...");
@@ -117,6 +127,18 @@ public class Game extends Task {
                     break;
             }
         }
+    }
+
+    public static double getDigree(double x, double y, double x2, double y2) {
+        double radian = Math.atan2(y2 - y,x2 - x);
+        double digree = radian * 180d / Math.PI;
+        digree += 90;
+        return digree;
+    }
+
+    public static double getDistance (double x, double y, double x2, double y2) {
+        double distance = Math.abs(Math.sqrt((x-x2)*(x-x2) + (y-y2)*(y-y2)));
+        return distance;
     }
 
     private static class Character extends ImageView{
@@ -184,7 +206,9 @@ public class Game extends Task {
             //this.setRotate(this.getRotate()+2);
         }
 
-        void draw () { this.setX(x-r); this.setY(y-r); }
+        void draw () { 
+            this.setX(x-r); this.setY(y-r);
+        }
 
         void exec () {
             String command = cmd[cmdNum];
@@ -243,9 +267,14 @@ public class Game extends Task {
             if (py < r) py = r; else if (py > screenHeight-r) py = screenHeight - r;
         }
 
+        //引数に指定した範囲内で一番近い敵の方向を向く
         void search (double range) {
+            double dis = 999;
             for (int i = 0; i < playerNum; i++) {
                 if (id == i) continue;
+                double d = getDistance(x, y, player[i].getPositionX(), player[i].getPositionY());
+                if (d < range || dis < d) continue;
+                dis = d;
                 this.setRotate(getDigree(x, y, player[i].getPositionX(), player[i].getPositionY()));
                 System.out.println("getRatate() = " + this.getRotate());
             }
@@ -266,13 +295,6 @@ public class Game extends Task {
         void action () {
             animationTimer.start();
             cmdTimer.play();
-        }
-
-        protected double getDigree(double x, double y, double x2, double y2) {
-            double radian = Math.atan2(y2 - y,x2 - x);
-            double digree = radian * 180d / Math.PI;
-            digree += 90;
-            return digree;
         }
     }    
 
